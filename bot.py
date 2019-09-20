@@ -2,7 +2,7 @@ import discord
 import asyncio
 import requests
 
-DISCORD_BOT_TOKEN = 'DISCORD_APP_TOKEN'
+DISCORD_BOT_TOKEN = 'tTmRFg8NMIl4wlw5K0e8hniFUJqkT38_'
 
 BTC_PRICE_URL_coinmarketcap = 'https://api.coinmarketcap.com/v1/ticker/bitcoin/?convert=RUB'
 
