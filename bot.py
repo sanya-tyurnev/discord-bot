@@ -1,13 +1,25 @@
+import requests
+import json
 import discord
-from discord.ext import commands
+import asyncio
 
-TOKEN = 'NjI0NTc4MzEyMzE1ODYzMDYw.XYYUGA.7sY3nH3V2xChCg-k8nfk5L6Q324'
-bot = commands.Bot(command_prefix='!')
+DISCORD_BOT_TOKEN = "NjI0NTc4MzEyMzE1ODYzMDYw.XYYUGA.7sY3nH3V2xChCg-k8nfk5L6Q324"
 
+client = discord.Client()
 
-@bot.command(pass_context=True)  # разрешаем передавать агрументы
-async def test(ctx, arg):  # создаем асинхронную фунцию бота
-    await ctx.send(arg)  # отправляем обратно аргумент
+@client.event
+async def on_ready():
+    print('Logged in as')
+    print(client.user.name)
+    print(client.user.id)
+    print('------')
 
+client.run(DISCORD_BOT_TOKEN)
 
-bot.run(TOKEN)
+#response = requests.get("http://raptus-statistics.000webhostapp.com/get.php?type=statistics")
+
+#data = json.loads(response.text)
+
+#print(data["points"])
+#print(data["rank"])
+
