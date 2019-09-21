@@ -2,8 +2,7 @@ import requests
 import json
 import discord
 import asyncio
-
-TOKEN = "NjI0NTc4MzEyMzE1ODYzMDYw.XYYqxw.sPGIuUm3A0Faocv_zX3II_4xFDM"
+import os
 
 client = discord.Client()
 
@@ -48,7 +47,9 @@ def get_statistics():
     if data["league"] == 6:
          rank = int(data["rank"]) - 2000
          league = "Стальная"
-         
+
     return data["points"], rank, league
-    
-client.run(TOKEN)
+
+TOKEN = os.environ.get("TOKEN")
+
+client.run(str(TOKEN))
