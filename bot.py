@@ -17,8 +17,40 @@ async def on_ready():
 async def on_message(message):
     if message.content.startswith('!стата'):
         print("Запрос статы")
-        points, rank, league = get_statistics()
-        await message.channel.send("Очки: " + "{:,}".format(int(points)).replace(',', ' ') + "\nЛига: " + league + "\nМесто: " + str(rank))
+        points, rank, league, next, previous = get_statistics()
+
+        if next[1] == 1:
+             next_league = "Элиты"
+
+        if next[1] == 2:
+             next_league = "Платины"
+
+        if next[1] == 3:
+             next_league = "Золота"
+
+        if next[1] == 4:
+             next_league = "Серебра"
+
+        if next[1] == 5:
+             next_league = "Бронзы"
+
+
+        if previous[1] == 2:
+             previous_league = "Платины"
+
+        if previous[1] == 3:
+             previous_league = "Золота"
+
+        if previous[1] == 4:
+             previous_league = "Серебра"
+
+        if previous[1] == 5:
+             previous_league = "Бронзы"
+
+        if previous[1] == 6:
+             previous_league = "Стали"
+
+        await message.channel.send("Очки: " + "{:,}".format(int(points)).replace(',', ' ') + "\nЛига: " + league + "\nМесто: " + str(rank) + "\n\nДо " + next_league + ": " + "{:,}".format(next[0]).replace(',', ' ') + "\nДо " + previous_league + ": " + "{:,}".format(previous[0]).replace(',', ' '))
 
 def get_statistics():
     response = requests.get("http://raptus-statistics.000webhostapp.com/get.php?type=bot")
@@ -47,14 +79,11 @@ def get_statistics():
     if data["league"] == 6:
          rank = int(data["rank"]) - 2000
          league = "Стальная"
+    
+    next = [data["next"]["left"], data["next"]["league"]]
+    previous = [data["previous"]["left"], data["previous"]["league"]]
 
-     next = [data["next"]["left"], data["next"]["league"]]
-
-     print(next[0])
-     print(next[1])
-
-     return data["points"], rank, league
+    return data["points"], rank, league, next, previous
 
 TOKEN = os.environ.get("TOKEN")
-
 client.run(str(TOKEN))
