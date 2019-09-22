@@ -18,10 +18,10 @@ async def on_message(message):
     if message.content.startswith('!стата'):
         print("Запрос статы")
         points, rank, league = get_statistics()
-        await message.channel.send("Очки: " + points + "\nЛига: " + league + "\nМесто: " + str(rank))
+        await message.channel.send("Очки: " + "{:,}".format(points).replace(',', ' ') + "\nЛига: " + league + "\nМесто: " + str(rank))
 
 def get_statistics():
-    response = requests.get("http://raptus-statistics.000webhostapp.com/get.php?type=statistics")
+    response = requests.get("http://raptus-statistics.000webhostapp.com/get.php?type=bot")
     data = json.loads(response.text)
 
     if data["league"] == 1:
