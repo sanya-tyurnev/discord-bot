@@ -17,7 +17,7 @@ async def on_ready():
 async def on_message(message):
     if message.content.startswith('!стата'):
         print("Запрос статы")
-        await message.channel.send("Выполняю запрос, ожидайте...")
+        await message.channel.send("Выполняю запрос, ожидайте... :wink:")
         points, rank, league, next, previous = get_statistics()
 
         if next[1] == 1:
