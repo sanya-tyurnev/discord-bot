@@ -48,7 +48,12 @@ def get_statistics():
          rank = int(data["rank"]) - 2000
          league = "Стальная"
 
-    return data["points"], rank, league
+     next = [data["next"]["left"], data["next"]["league"]]
+
+     print(next[0])
+     print(next[1])
+
+     return data["points"], rank, league
 
 TOKEN = os.environ.get("TOKEN")
 
