@@ -8,16 +8,16 @@ client = discord.Client()
 
 @client.event
 async def on_ready():
-    print('Logged in as')
+    print("Вошли как")
     print(client.user.name)
-    print(client.user.id)
-    print('------')
+    await client.change_presence(activity=discord.Game("Отправьте !инфа для получения списка команд!"))
 
 @client.event
 async def on_message(message):
     if message.content.startswith('!стата'):
         print("Запрос статы")
         await message.channel.send("Секундочку... :wink:")
+
         points, rank, league, next, previous = get_statistics()
 
         if next[1] == 1:
@@ -51,8 +51,27 @@ async def on_message(message):
         if previous[1] == 6:
              previous_league = "Стали"
 
-        #await message.channel.send("Очки: " + "{:,}".format(int(points)).replace(',', ' ') + "\nЛига: " + league + "\nМесто: " + str(rank) + "\n\nДо " + next_league + ": " + "{:,}".format(next[0]).replace(',', ' ') + "\nДо " + previous_league + ": " + "{:,}".format(previous[0]).replace(',', ' '))
         await message.channel.send(">>> ```\nОчки: " + "{:,}".format(int(points)).replace(',', ' ') + "\nЛига: " + league + "\nМесто: " + str(rank) + "```\n```\nДо " + next_league + ": " + "{:,}".format(next[0]).replace(',', ' ') + "\nДо " + previous_league + ": " + "{:,}".format(previous[0]).replace(',', ' ') + "```")
+
+    if message.content.startswith('!очистить'):
+         moderators = os.environ.get("moderators")
+
+         for moderator in str(moderators).split(","):
+              is_moderator = False
+
+              if moderator == str(message.author):
+                   is_moderator = True
+
+                   try:
+                        await message.channel.purge(limit=None, check=lambda msg: not msg.pinned)
+                   except AttributeError:
+                        await message.channel.send("Невозможно очистить личные сообщения :worried:")
+
+         if is_moderator == False:
+              await message.channel.send("У тебя нет здесь власти :unamused:")
+
+    if message.content.startswith('!инфа'):
+         await message.channel.send("Доступные команды\n>>> ```\n!стата -> возвращает текущее место в рейтинге\n!очистить -> очищает канал от сообщений```")
 
 def get_statistics():
     response = requests.get("http://raptus-statistics.000webhostapp.com/get.php?type=bot")
@@ -87,5 +106,5 @@ def get_statistics():
 
     return data["points"], rank, league, next, previous
 
-TOKEN = os.environ.get("TOKEN")
-client.run(str(TOKEN))
+token = os.environ.get("token")
+client.run(str(token))
