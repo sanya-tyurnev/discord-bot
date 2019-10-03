@@ -10,13 +10,14 @@ client = discord.Client()
 async def on_ready():
     print("Вошли как")
     print(client.user.name)
-    await client.change_presence(activity=discord.Game("Отправьте !инфа для получения списка команд!"))
+    await client.change_presence(activity=discord.Game("¯\_(ツ)_/¯"))
 
 @client.event
 async def on_message(message):
     if message.content.startswith('!стата'):
         print("Запрос статы")
-        await message.channel.send("Секундочку... :wink:")
+        my_msg = await message.channel.send("Секундочку... :wink:")
+        await message.delete()
 
         points, rank, league, next, previous = get_statistics()
 
@@ -50,8 +51,9 @@ async def on_message(message):
 
         if previous[1] == 6:
              previous_league = "Стали"
-
+             
         await message.channel.send(">>> ```\nОчки: " + "{:,}".format(int(points)).replace(',', ' ') + "\nЛига: " + league + "\nМесто: " + str(rank) + "```\n```\nДо " + next_league + ": " + "{:,}".format(next[0]).replace(',', ' ') + "\nДо " + previous_league + ": " + "{:,}".format(previous[0]).replace(',', ' ') + "```")
+        await my_msg.delete()
 
     if message.content.startswith('!очистить'):
          moderators = os.environ.get("moderators")
