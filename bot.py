@@ -18,7 +18,8 @@ async def test(ctx):
 
 @client.command()
 async def id(ctx):
-    await ctx.send("Ваш ID: " + str(ctx.author.id))
+    if str(ctx.channel.type) == "private":
+        await ctx.send("Ваш ID: " + str(ctx.author.id))
 
 @client.command()
 async def clear(ctx):
