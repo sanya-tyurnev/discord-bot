@@ -74,6 +74,7 @@ async def on_message(message):
 
     if message.content.startswith('!инфа'):
          await message.channel.send("Доступные команды\n>>> ```\n!стата -> возвращает текущее место в рейтинге\n!очистить -> очищает канал от сообщений```")
+         await message.delete()
 
 def get_statistics():
     response = requests.get("http://raptus-statistics.000webhostapp.com/get.php?type=bot")
