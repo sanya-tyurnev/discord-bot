@@ -32,7 +32,7 @@ async def clear(ctx):
             
             if moderator == str(ctx.author.id):
                 is_moderator = True
-                await ctx.purge(limit=None, check=lambda msg: not msg.pinned)
+                await ctx.channel.purge(limit=None, check=lambda msg: not msg.pinned)
                 
             if is_moderator == False:
                 await ctx.send("У тебя нет здесь власти :unamused:")
