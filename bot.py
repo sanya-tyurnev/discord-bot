@@ -58,7 +58,7 @@ async def place(ctx):
 
 @client.command()
 async def info(ctx):
-    await ctx.send("Доступные команды\n>>> ```\n!place -> возвращает текущее место в рейтинге\n!clear -> очищает канал от сообщений```")
+    await ctx.send("Доступные команды\n>>> ```\n!place -> возвращает текущее место в рейтинге\n!clear -> очищает канал от сообщений\n!rm -> приглашает всех на рм```")
 
     if str(ctx.channel.type) != "private":
         await ctx.message.delete()
@@ -85,6 +85,13 @@ async def clear(ctx):
             if is_moderator == False:
                 await ctx.send("У тебя нет здесь власти :unamused:")
                 
+@client.command()
+async def rm(ctx):
+    if str(ctx.channel.type) != "private":
+        await ctx.message.delete()
+        my_msg = await ctx.send("На рм блять", tts=True)
+        await my_msg.delete()
+
 def get_statistics():
     response = requests.get("http://raptus-statistics.000webhostapp.com/get.php?type=bot")
     data = json.loads(response.text)
