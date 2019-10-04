@@ -59,7 +59,9 @@ async def place(ctx):
 @client.command()
 async def info(ctx):
     await ctx.send("Доступные команды\n>>> ```\n!place -> возвращает текущее место в рейтинге\n!clear -> очищает канал от сообщений```")
-    await ctx.message.delete()
+
+    if str(ctx.channel.type) != "private":
+        await ctx.message.delete()
 
 @client.command()
 async def id(ctx):
