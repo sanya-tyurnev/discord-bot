@@ -16,7 +16,9 @@ async def on_ready():
 @client.command()
 async def place(ctx):
     my_msg = await ctx.send("Секундочку... :wink:")
-    await ctx.message.delete()
+    
+    if str(ctx.channel.type) != "private":
+        await ctx.message.delete()
 
     points, rank, league, next, previous = get_statistics()
     
