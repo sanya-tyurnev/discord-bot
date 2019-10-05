@@ -58,7 +58,7 @@ async def place(ctx):
 
 @client.command()
 async def info(ctx):
-    await ctx.send("Доступные команды\n>>> ```\n!place -> возвращает текущее место в рейтинге\n!clear -> очищает канал от сообщений\n!rm -> приглашает всех на рм```")
+    await ctx.send("Доступные команды\n>>> ```\n!place -> возвращает текущее место в рейтинге\n!clear -> очищает канал от сообщений\n!rm -> приглашает всех на рм\n!say текст -> отправляет tts сообщение с указанным текстом```")
 
     if str(ctx.channel.type) != "private":
         await ctx.message.delete()
@@ -87,6 +87,16 @@ async def rm(ctx):
     if str(ctx.channel.type) != "private":
         await ctx.message.delete()
         my_msg = await ctx.send("На рм блять", tts=True)
+        await my_msg.delete()
+
+@client.command()
+async def say(ctx):
+    content = ctx.message.content.split(" ")
+    send_msg = " ".join(content[content.index("!say") + 1:])
+
+    if len(send_msg) > 0:
+        await ctx.message.delete()
+        my_msg = await ctx.send(send_msg, tts=True)
         await my_msg.delete()
 
 def get_statistics():
