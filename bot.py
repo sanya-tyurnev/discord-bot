@@ -80,7 +80,7 @@ async def clear(ctx):
                 await ctx.channel.purge(limit=None, check=lambda msg: not msg.pinned)
                 break 
         else:
-            await ctx.send("У тебя нет здесь власти :unamused:")    
+            await ctx.send(ctx.author.name + "у тебя нет здесь власти :unamused:")    
                 
 @client.command()
 async def rm(ctx):
