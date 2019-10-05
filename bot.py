@@ -76,14 +76,11 @@ async def clear(ctx):
         moderators = os.environ.get("moderators")
         
         for moderator in str(moderators).split(","):
-            is_moderator = False
-
             if int(moderator) == ctx.author.id:
-                is_moderator = True
                 await ctx.channel.purge(limit=None, check=lambda msg: not msg.pinned)
-
-        if is_moderator == False:
-            await ctx.send("У тебя нет здесь власти :unamused:")
+                break 
+        else:
+            await ctx.send("У тебя нет здесь власти :unamused:")    
                 
 @client.command()
 async def rm(ctx):
