@@ -11,7 +11,7 @@ client = commands.Bot(command_prefix = '!')
 async def on_ready():
     print("Вошли как")
     print(client.user.name)
-    await client.change_presence(activity=discord.Game("¯\_(ツ)_/¯"))
+    await client.change_presence(activity=discord.Game("¯\_(ツ)_/¯", type=3))
 
 @client.command()
 async def place(ctx):
