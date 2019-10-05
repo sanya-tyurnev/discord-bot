@@ -78,7 +78,7 @@ async def clear(ctx):
         for moderator in str(moderators).split(","):
             is_moderator = False
             
-            if moderator == str(ctx.author.id):
+            if int(moderator) == ctx.author.id:
                 is_moderator = True
                 
         if is_moderator == False:
