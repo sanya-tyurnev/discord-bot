@@ -77,10 +77,11 @@ async def clear(ctx):
         
         for moderator in str(moderators).split(","):
             is_moderator = False
-            
-            print("ок")
+
             if int(moderator) == ctx.author.id:
                 is_moderator = True
+            
+            print(moderator)
                 
         if is_moderator == False:
             await ctx.send("У тебя нет здесь власти :unamused:")
