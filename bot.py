@@ -80,7 +80,7 @@ async def clear(ctx):
                 await ctx.channel.purge(limit=None, check=lambda msg: not msg.pinned)
                 break 
         else:
-            await ctx.send(ctx.author.name + " у тебя нет здесь власти :unamused:")    
+            await ctx.send(ctx.author.name + " у тебя нет здесь власти :unamused:")
                 
 @client.command()
 async def rm(ctx):
@@ -98,6 +98,36 @@ async def say(ctx):
         await ctx.message.delete()
         my_msg = await ctx.send(send_msg, tts=True)
         await my_msg.delete()
+
+@client.command()
+async def ban(ctx, member : discord.Member = None):
+    if member is not None:
+        moderators = os.environ.get("moderators")
+        
+        for moderator in str(moderators).split(","):
+            if int(moderator) == ctx.author.id:
+                role = discord.utils.get(ctx.guild.roles, name="БАН")
+                await member.add_roles(role)
+                await ctx.send(member.name + " теперь не может отправлять сообщения :zipper_mouth:")
+                await ctx.message.delete()
+                break 
+        else:
+            await ctx.send(ctx.author.name + " у тебя нет здесь власти :unamused:")
+
+@client.command()
+async def unban(ctx, member : discord.Member = None):
+    if member is not None:
+        moderators = os.environ.get("moderators")
+        
+        for moderator in str(moderators).split(","):
+            if int(moderator) == ctx.author.id:
+                role = discord.utils.get(ctx.guild.roles, name="БАН")
+                await member.remove_roles(role)
+                await ctx.send(member.name + " помилован :kissing_heart:")
+                await ctx.message.delete()
+                break 
+        else:
+            await ctx.send(ctx.author.name + " у тебя нет здесь власти :unamused:")
 
 def get_statistics():
     response = requests.get("http://raptus-statistics.000webhostapp.com/get.php?type=bot")
