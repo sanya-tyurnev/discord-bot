@@ -107,10 +107,8 @@ async def say(ctx):
 @client.command()
 async def ban(ctx, member : discord.Member = None):
     if member is not None:
-        if str(ctx.channel.type) == "private":
+        if str(ctx.channel.type) == "private" or member != discord.Member:
             await ctx.send("Данная команда работает только на сервере :worried:")
-        elif member.split("@")[1] == ctx.author:
-            print("низя")
         else:
             is_moderator = False
             moderators = os.environ.get("moderators")
