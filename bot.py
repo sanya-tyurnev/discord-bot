@@ -109,6 +109,8 @@ async def ban(ctx, member : discord.Member = None):
     if member is not None:
         if str(ctx.channel.type) == "private":
             await ctx.send("Данная команда работает только на сервере :worried:")
+        elif ctx.author.id == member.id:
+            print("тот")
         else:
             is_moderator = False
             moderators = os.environ.get("moderators")
@@ -154,6 +156,11 @@ async def unban(ctx, member : discord.Member = None):
 
 @ban.error
 async def ban_error(ctx, error):
+    if isinstance(error, commands.BadArgument):
+        await ctx.send("Указанный аргумент не является ссылкой на участника :thinking:")
+
+@unban.error
+async def unban_error(ctx, error):
     if isinstance(error, commands.BadArgument):
         await ctx.send("Указанный аргумент не является ссылкой на участника :thinking:")
 
