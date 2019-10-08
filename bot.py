@@ -102,17 +102,25 @@ async def say(ctx):
 @client.command()
 async def ban(ctx, member : discord.Member = None):
     if member is not None:
-        moderators = os.environ.get("moderators")
-        
-        for moderator in str(moderators).split(","):
-            if int(moderator) == ctx.author.id:
-                role = discord.utils.get(ctx.guild.roles, name="БАН")
-                await member.add_roles(role)
-                await ctx.send(member.name + " теперь не может отправлять сообщения :zipper_mouth:")
-                await ctx.message.delete()
-                break 
+        for role in member.roles:
+            if role.name == "админ":
+                await ctx.send("Нельзя забанить админа :stuck_out_tongue:")
+                break
+            elif role.name == "модерутор":
+                await ctx.send("Нельзя забанить модератора :stuck_out_tongue:")
+                break
         else:
-            await ctx.send(ctx.author.name + " у тебя нет здесь власти :unamused:")
+            moderators = os.environ.get("moderators")
+            
+            for moderator in str(moderators).split(","):
+                if int(moderator) == ctx.author.id:
+                    role = discord.utils.get(ctx.guild.roles, name="БАН")
+                    await member.add_roles(role)
+                    await ctx.send(member.name + " теперь не может отправлять сообщения :zipper_mouth:")
+                    await ctx.message.delete()
+                    break 
+                else:
+                    await ctx.send(ctx.author.name + " у тебя нет здесь власти :unamused:")
 
 @client.command()
 async def unban(ctx, member : discord.Member = None):
@@ -128,6 +136,11 @@ async def unban(ctx, member : discord.Member = None):
                 break 
         else:
             await ctx.send(ctx.author.name + " у тебя нет здесь власти :unamused:")
+
+@client.command()
+async def test(ctx, member : discord.Member = None):
+    for role in member.roles:
+        print(role.name)
 
 def get_statistics():
     response = requests.get("http://raptus-statistics.000webhostapp.com/get.php?type=bot")
