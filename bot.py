@@ -124,10 +124,10 @@ async def ban(ctx, member : discord.Member = None):
                 
             if is_moderator:
                 for role in member.roles:
-                    if role.name == "админ":
+                    if role.name == "АДМИН":
                         await ctx.send("Нельзя забанить админа :stuck_out_tongue:")
                         break
-                    elif role.name == "модерутор":
+                    elif role.name == "МОДЕРАТОР":
                         await ctx.send("Нельзя забанить модератора :stuck_out_tongue:")
                         break
                 else:
