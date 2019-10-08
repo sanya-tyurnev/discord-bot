@@ -102,7 +102,7 @@ async def say(ctx):
 @client.command()
 async def ban(ctx, member : discord.Member = None):
     if member is not None:
-        is_everyone = True
+        is_everyone = None
 
         for role in member.roles:
             if role.name == "админ":
@@ -111,6 +111,8 @@ async def ban(ctx, member : discord.Member = None):
             elif role.name == "модерутор":
                 await ctx.send("Нельзя забанить модератора :stuck_out_tongue:")
                 is_everyone = False
+            else:
+                is_everyone = True
 
         if is_everyone:
             moderators = os.environ.get("moderators")
