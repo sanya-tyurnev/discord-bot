@@ -84,20 +84,25 @@ async def clear(ctx):
                 
 @client.command()
 async def rm(ctx):
-    if str(ctx.channel.type) != "private":
+    if str(ctx.channel.type) == "private":
+        await ctx.send("Данная команда работает только на сервере :worried:")
+    else:
         await ctx.message.delete()
         my_msg = await ctx.send("На рм блять", tts=True)
         await my_msg.delete()
 
 @client.command()
 async def say(ctx):
-    content = ctx.message.content.split(" ")
-    send_msg = " ".join(content[content.index("!say") + 1:])
-
-    if len(send_msg) > 0:
-        await ctx.message.delete()
-        my_msg = await ctx.send(send_msg, tts=True)
-        await my_msg.delete()
+    if str(ctx.channel.type) == "private":
+        await ctx.send("Данная команда работает только на сервере :worried:")
+    else:
+        content = ctx.message.content.split(" ")
+        send_msg = " ".join(content[content.index("!say") + 1:])
+        
+        if len(send_msg) > 0:
+            await ctx.message.delete()
+            my_msg = await ctx.send(send_msg, tts=True)
+            await my_msg.delete()
 
 @client.command()
 async def ban(ctx, member : discord.Member = None):
@@ -132,17 +137,20 @@ async def ban(ctx, member : discord.Member = None):
 @client.command()
 async def unban(ctx, member : discord.Member = None):
     if member is not None:
-        moderators = os.environ.get("moderators")
-        
-        for moderator in str(moderators).split(","):
-            if int(moderator) == ctx.author.id:
-                role = discord.utils.get(ctx.guild.roles, name="БАН")
-                await member.remove_roles(role)
-                await ctx.send(member.name + " помилован :kissing_heart:")
-                await ctx.message.delete()
-                break 
+        if str(ctx.channel.type) == "private":
+            await ctx.send("Данная команда работает только на сервере :worried:")
         else:
-            await ctx.send(ctx.author.name + " у тебя нет здесь власти :unamused:")
+            moderators = os.environ.get("moderators")
+            
+            for moderator in str(moderators).split(","):
+                if int(moderator) == ctx.author.id:
+                    role = discord.utils.get(ctx.guild.roles, name="БАН")
+                    await member.remove_roles(role)
+                    await ctx.send(member.name + " помилован :kissing_heart:")
+                    await ctx.message.delete()
+                    break 
+            else:
+                await ctx.send(ctx.author.name + " у тебя нет здесь власти :unamused:")
 
 def get_statistics():
     response = requests.get("http://raptus-statistics.000webhostapp.com/get.php?type=bot")
