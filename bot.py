@@ -110,7 +110,7 @@ async def ban(ctx, member : discord.Member = None):
         if str(ctx.channel.type) == "private":
             await ctx.send("Данная команда работает только на сервере :worried:")
         elif ctx.author.id == member.id:
-            print("тот")
+            await ctx.send("Нельзя забанить самого себя :stuck_out_tongue:")
         else:
             is_moderator = False
             moderators = os.environ.get("moderators")
