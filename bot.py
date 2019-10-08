@@ -102,6 +102,8 @@ async def say(ctx):
 @client.command()
 async def ban(ctx, member : discord.Member = None):
     if member is not None:
+        moderators = os.environ.get("moderators")
+        
         for moderator in str(moderators).split(","):
             if int(moderator) == ctx.author.id:
                 for role in member.roles:
@@ -119,23 +121,6 @@ async def ban(ctx, member : discord.Member = None):
                     break
         else:
             await ctx.send(ctx.author.name + " у тебя нет здесь власти :unamused:")
-
-
-
-        
-
-        if is_everyone:
-            moderators = os.environ.get("moderators")
-            
-            for moderator in str(moderators).split(","):
-                if int(moderator) == ctx.author.id:
-                    role = discord.utils.get(ctx.guild.roles, name="БАН")
-                    await member.add_roles(role)
-                    await ctx.send(member.name + " теперь не может отправлять сообщения :zipper_mouth:")
-                    await ctx.message.delete()
-                    break 
-                else:
-                    await ctx.send(ctx.author.name + " у тебя нет здесь власти :unamused:")
 
 @client.command()
 async def unban(ctx, member : discord.Member = None):
