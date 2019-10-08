@@ -107,7 +107,7 @@ async def say(ctx):
 @client.command()
 async def ban(ctx, member : discord.Member = None):
     if member is not None:
-        if str(ctx.channel.type) == "private" or member != discord.Member:
+        if str(ctx.channel.type) == "private":
             await ctx.send("Данная команда работает только на сервере :worried:")
         else:
             is_moderator = False
@@ -151,6 +151,11 @@ async def unban(ctx, member : discord.Member = None):
                     break 
             else:
                 await ctx.send(ctx.author.name + " у тебя нет здесь власти :unamused:")
+
+@ban.error
+async def ban_error(ctx, error):
+    if isinstance(error, commands.BadArgument):
+        await ctx.send("Указанный аргумент не является ссылкой на участника :thinking:")
 
 def get_statistics():
     response = requests.get("http://raptus-statistics.000webhostapp.com/get.php?type=bot")
