@@ -6,6 +6,19 @@ import os
 from discord.ext import commands
 
 client = commands.Bot(command_prefix = '!')
+client.remove_command("help")
+
+all_commands = [
+    "!place -> возвращает текущее место в рейтинге",
+    "!rm кол-во повторений (дефолт 1, макс. 5) -> приглашает всех на рм",
+    "!say текст * кол-во повторений (дефолт 1, макс. 5) -> отправляет tts сообщение с указанным текстом"
+    ]
+
+moderator_commands = [
+    "!clear -> очищает канал от сообщений",
+    "!ban @ссылка на участника -> лишает участника возможности отправлять любые сообщения",
+    "!unban @ссылка на участника -> снимает все ограничения с участника"
+    ]
 
 @client.event
 async def on_ready():
@@ -57,8 +70,19 @@ async def place(ctx):
     await my_msg.delete()
 
 @client.command()
-async def info(ctx):
-    await ctx.send("Доступные команды\n>>> ```\n!place -> возвращает текущее место в рейтинге\n!clear -> очищает канал от сообщений\n!rm -> приглашает всех на рм\n!say текст -> отправляет tts сообщение с указанным текстом\n!ban @ссылка на участника -> лишает участника возможности отправлять любые сообщения\n!unban @ссылка на участника -> снимает все ограничения с участника```")
+async def help(ctx):
+    all_commands_msg = "Общие команды:\n"
+    moderator_commands_msg = "Команды для модераторов:\n"
+
+    for all_command in all_commands:
+        all_commands_msg += "```" + all_command + "```"
+
+    for moderator_command in moderator_commands:
+        moderator_commands_msg += "```" + moderator_command + "```"
+
+    full_msg = all_commands_msg + "\n" + moderator_commands_msg
+
+    await ctx.send(full_msg)
 
     if str(ctx.channel.type) != "private":
         await ctx.message.delete()
@@ -83,12 +107,15 @@ async def clear(ctx):
             await ctx.send(ctx.author.name + " у тебя нет здесь власти :unamused:")
                 
 @client.command()
-async def rm(ctx):
+async def rm(ctx, repeat = 1):
     if str(ctx.channel.type) == "private":
         await ctx.send("Данная команда работает только на сервере :worried:")
     else:
+        if repeat > 5:
+            repeat = 5
+
         await ctx.message.delete()
-        my_msg = await ctx.send("На рм блять", tts=True)
+        my_msg = await ctx.send("На рм блять\n" * repeat, tts=True)
         await my_msg.delete()
 
 @client.command()
@@ -96,12 +123,23 @@ async def say(ctx):
     if str(ctx.channel.type) == "private":
         await ctx.send("Данная команда работает только на сервере :worried:")
     else:
-        content = ctx.message.content.split(" ")
-        send_msg = " ".join(content[content.index("!say") + 1:])
-        
-        if len(send_msg) > 0:
+        full_content = ctx.message.content.split(" ")
+        content = " ".join(full_content[full_content.index("!say") + 1:])
+
+        if len(content) > 0:
+            content_parts = content.split("*")
+            send_msg = content_parts[0]
+            
+            if len(content_parts) > 1:
+                if int(content_parts[1]) > 5:
+                    repeat = 5
+                else:
+                    repeat = int(content_parts[1])
+            else:
+                repeat = 1
+
             await ctx.message.delete()
-            my_msg = await ctx.send(send_msg, tts=True)
+            my_msg = await ctx.send((send_msg + "\n") * repeat, tts=True)
             await my_msg.delete()
 
 @client.command()
@@ -109,8 +147,6 @@ async def ban(ctx, member : discord.Member = None):
     if member is not None:
         if str(ctx.channel.type) == "private":
             await ctx.send("Данная команда работает только на сервере :worried:")
-        elif ctx.author.id == member.id:
-            await ctx.send("Нельзя забанить самого себя :stuck_out_tongue:")
         else:
             is_moderator = False
             moderators = os.environ.get("moderators")
@@ -123,18 +159,23 @@ async def ban(ctx, member : discord.Member = None):
                 await ctx.send(ctx.author.name + " у тебя нет здесь власти :unamused:")
                 
             if is_moderator:
-                for role in member.roles:
-                    if role.name == "АДМИН":
-                        await ctx.send("Нельзя забанить админа :stuck_out_tongue:")
-                        break
-                    elif role.name == "МОДЕРАТОР":
-                        await ctx.send("Нельзя забанить модератора :stuck_out_tongue:")
-                        break
+                if ctx.author.id == member.id:
+                    await ctx.send("Нельзя забанить самого себя :stuck_out_tongue:")
+                elif client.user.id == member.id:
+                    await ctx.send("Мечтать не вредно :stuck_out_tongue:")
                 else:
-                    role = discord.utils.get(ctx.guild.roles, name="БАН")
-                    await member.add_roles(role)
-                    await ctx.send(member.name + " теперь не может отправлять сообщения :zipper_mouth:")
-                    await ctx.message.delete()
+                    for role in member.roles:
+                        if role.name == "АДМИН":
+                            await ctx.send("Нельзя забанить админа :stuck_out_tongue:")
+                            break
+                        elif role.name == "МОДЕРАТОР":
+                            await ctx.send("Нельзя забанить модератора :stuck_out_tongue:")
+                            break
+                    else:
+                        role = discord.utils.get(ctx.guild.roles, name="БАН")
+                        await member.add_roles(role)
+                        await ctx.send(member.name + " теперь не может отправлять сообщения :zipper_mouth:")
+                        await ctx.message.delete()
 
 @client.command()
 async def unban(ctx, member : discord.Member = None):
@@ -163,6 +204,11 @@ async def ban_error(ctx, error):
 async def unban_error(ctx, error):
     if isinstance(error, commands.BadArgument):
         await ctx.send("Указанный аргумент не является ссылкой на участника :thinking:")
+
+@client.event
+async def on_command_error(ctx, error):
+    if isinstance(error, commands.CommandNotFound):
+        await ctx.send("Указанная команда не существует :thinking:\nОтправьте !help для получения списка команд!")
 
 def get_statistics():
     response = requests.get("http://raptus-statistics.000webhostapp.com/get.php?type=bot")
