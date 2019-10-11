@@ -208,7 +208,7 @@ async def unban_error(ctx, error):
 @client.event
 async def on_command_error(ctx, error):
     if isinstance(error, commands.CommandNotFound):
-        await ctx.send("Указанная команда не существует :thinking:\nОтправьте !help для получения списка команд!")
+        await ctx.send("Команда " + ctx.message.content + " не существует :thinking:\nОтправьте !help для получения списка команд!")
 
 def get_statistics():
     response = requests.get("http://raptus-statistics.000webhostapp.com/get.php?type=bot")
