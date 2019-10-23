@@ -9,9 +9,9 @@ client = commands.Bot(command_prefix = '!')
 client.remove_command("help")
 
 all_commands = [
-    "!place -> возвращает текущее место в рейтинге",
-    "!rm кол-во повторений (дефолт 1, макс. 5) -> приглашает всех на рм",
-    "!say текст * кол-во повторений (дефолт 1, макс. 5) -> отправляет tts сообщение с указанным текстом"
+    "!place -> возвращает текущее место в рейтинге"
+    #"!rm кол-во повторений (дефолт 1, макс. 5) -> приглашает всех на рм",
+    #"!say текст * кол-во повторений (дефолт 1, макс. 5) -> отправляет tts сообщение с указанным текстом"
     ]
 
 moderator_commands = [
@@ -106,41 +106,41 @@ async def clear(ctx):
         else:
             await ctx.send(ctx.author.name + " у тебя нет здесь власти :unamused:")
                 
-@client.command()
-async def rm(ctx, repeat = 1):
-    if str(ctx.channel.type) == "private":
-        await ctx.send("Данная команда работает только на сервере :worried:")
-    else:
-        if repeat > 5:
-            repeat = 5
+#@client.command()
+#async def rm(ctx, repeat = 1):
+#    if str(ctx.channel.type) == "private":
+#        await ctx.send("Данная команда работает только на сервере :worried:")
+#    else:
+#        if repeat > 5:
+#            repeat = 5
+#
+#        await ctx.message.delete()
+#        my_msg = await ctx.send("На рм блять\n" * repeat, tts=True)
+#        await my_msg.delete()
 
-        await ctx.message.delete()
-        my_msg = await ctx.send("На рм блять\n" * repeat, tts=True)
-        await my_msg.delete()
-
-@client.command()
-async def say(ctx):
-    if str(ctx.channel.type) == "private":
-        await ctx.send("Данная команда работает только на сервере :worried:")
-    else:
-        full_content = ctx.message.content.split(" ")
-        content = " ".join(full_content[full_content.index("!say") + 1:])
-
-        if len(content) > 0:
-            content_parts = content.split("*")
-            send_msg = content_parts[0]
-            
-            if len(content_parts) > 1:
-                if int(content_parts[1]) > 5:
-                    repeat = 5
-                else:
-                    repeat = int(content_parts[1])
-            else:
-                repeat = 1
-
-            await ctx.message.delete()
-            my_msg = await ctx.send((send_msg + "\n") * repeat, tts=True)
-            await my_msg.delete()
+#@client.command()
+#async def say(ctx):
+#    if str(ctx.channel.type) == "private":
+#        await ctx.send("Данная команда работает только на сервере :worried:")
+#    else:
+#        full_content = ctx.message.content.split(" ")
+#        content = " ".join(full_content[full_content.index("!say") + 1:])
+#
+#        if len(content) > 0:
+#            content_parts = content.split("*")
+#            send_msg = content_parts[0]
+#            
+#            if len(content_parts) > 1:
+#                if int(content_parts[1]) > 5:
+#                    repeat = 5
+#                else:
+#                    repeat = int(content_parts[1])
+#            else:
+#                repeat = 1
+#
+#            await ctx.message.delete()
+#            my_msg = await ctx.send((send_msg + "\n") * repeat, tts=True)
+#            await my_msg.delete()
 
 @client.command()
 async def ban(ctx, member : discord.Member = None):
