@@ -93,6 +93,23 @@ async def id(ctx):
         await ctx.send("Ваш ID: " + str(ctx.author.id))
 
 @client.command()
+async def get_id(ctx):
+    if str(ctx.channel.type) == "private":
+        full_content = ctx.message.content.split(" ")
+        content = " ".join(full_content[full_content.index("!get_id") + 1:])
+        is_break = False
+
+        for guild in client.guilds:
+            for member in guild.members:
+                if member.name == content:
+                    await ctx.send(member.name + "#" + member.discriminator + "\nID: " + str(member.id))
+                    is_break = True
+                    break
+            
+            if is_break:
+                break
+
+@client.command()
 async def clear(ctx):
     if str(ctx.channel.type) == "private":
         await ctx.send("Невозможно очистить личные сообщения :worried:")
@@ -102,7 +119,7 @@ async def clear(ctx):
         for moderator in str(moderators).split(","):
             if int(moderator) == ctx.author.id:
                 await ctx.channel.purge(limit=None, check=lambda msg: not msg.pinned)
-                break 
+                break
         else:
             await ctx.send(ctx.author.name + " у тебя нет здесь власти :unamused:")
                 
