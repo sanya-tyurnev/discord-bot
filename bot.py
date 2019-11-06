@@ -260,5 +260,5 @@ def get_statistics():
     
     return data["points"], rank, league, next, previous
 
-#token = os.environ.get("token")
-#client.run(str(token))
+token = os.environ.get("token")
+client.run(str(token))
