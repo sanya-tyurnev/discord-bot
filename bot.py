@@ -26,6 +26,13 @@ async def on_ready():
     print(client.user.name)
     await client.change_presence(activity=discord.Game("¯\_(ツ)_/¯"), status=discord.Status.do_not_disturb)
 
+@client.event
+async def on_message(message):
+    if(message.content.lower().rstrip("!") == "всем привет"):
+        await message.channel.send("Приветик :kissing_heart:")
+
+    await client.process_commands(message)
+
 @client.command()
 async def place(ctx):
     my_msg = await ctx.send("Секундочку... :wink:")
