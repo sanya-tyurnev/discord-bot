@@ -11,7 +11,8 @@ client.remove_command("help")
 all_commands = [
     "!place -> возвращает текущее место в рейтинге",
     "!rm кол-во повторений (дефолт 1, макс. 5) -> приглашает всех на рм",
-    "!say текст * кол-во повторений (дефолт 1, макс. 5) -> отправляет tts сообщение с указанным текстом"
+    "!say текст * кол-во повторений (дефолт 1, макс. 5) -> отправляет tts сообщение с указанным текстом",
+    "!crowns название спецоперации сложность (если есть) -> возвращает кол-во очков и время для получения всех корон"
     ]
 
 moderator_commands = [
@@ -19,6 +20,52 @@ moderator_commands = [
     "!ban @ссылка на участника -> лишает участника возможности отправлять любые сообщения",
     "!unban @ссылка на участника -> снимает все ограничения с участника"
     ]
+
+pripyat = [
+    [171000, "49:00"],
+    [180000, "64:00"],
+    [180000, "64:00"]
+]
+
+eclipse = [
+    [172979, "24:04"],
+    [186139, "26:02"],
+    [200188, "41:45"]
+]
+
+icebreaker = [
+    [1006712, "33:10"],
+    [1107677, "29:53"],
+    [291535, "35:08"]
+]
+
+black_shark = [
+    [278872, "35:12"],
+    [303596, "36:26"],
+    [481648, "42:47"]
+]
+
+anubis = [
+    [739000, "33:00"],
+    [926000, "33:00"],
+    [1841000, "35:00"]
+]
+
+volcano = [
+    [1520000, "35:00"],
+    [1566000, "33:30"],
+    [1513000, "32:00"],
+    [1774000, "46:30"]
+]
+
+snow_bastion = [
+    [365500, "26:30"],
+    [450000, "31:30"],
+    [446200, "19:00"],
+    [1261700, "77:00"]
+]
+
+white_shark = [825000, "49:30"]
 
 @client.event
 async def on_ready():
@@ -147,20 +194,19 @@ async def say(ctx):
     if str(ctx.channel.type) == "private":
         await ctx.send("Данная команда работает только на сервере :worried:")
     else:
-        full_content = ctx.message.content.split(" ")
-        content = " ".join(full_content[full_content.index("!say") + 1:])
+        repeat = 1
 
-        if len(content) > 0:
-            content_parts = content.split("*")
-            send_msg = content_parts[0]
-            
-            if len(content_parts) > 1:
-                if int(content_parts[1]) > 5:
-                    repeat = 5
-                else:
-                    repeat = int(content_parts[1])
+        if ctx.message.content.strip() != "!say":
+            content = ctx.message.content[ctx.message.content.find(" ") + 1 :].strip()
+
+            if content.find("*") >= 0:
+                send_msg = content[: content.rfind("*")].strip()
+                repeat = int(content[content.rfind("*") + 1 :].strip())
             else:
-                repeat = 1
+                send_msg = content
+
+            if repeat > 5:
+                repeat = 5
 
             await ctx.message.delete()
             my_msg = await ctx.send((send_msg + "\n") * repeat, tts=True)
@@ -218,6 +264,179 @@ async def unban(ctx, member : discord.Member = None):
                     break 
             else:
                 await ctx.send(ctx.author.name + " у тебя нет здесь власти :unamused:")
+
+@client.command()
+async def crowns(ctx):
+    content = ctx.message.content[ctx.message.content.find(" ") + 1 :].strip()
+    white_shark_flag = False
+    send = False
+
+    if content.lower().find("белая акула") >= 0:
+        mission_name = content
+    else:
+        mission_name = content[: content.rfind(" ")].strip()
+
+    if mission_name.lower() == "белая акула":
+        white_shark_flag = True
+    else:
+        mission_difficulty = content[content.rfind(" ") + 1 :].strip()
+
+    if mission_name.lower() == "припять":
+        name = "Припять"
+        send = True
+
+        if mission_difficulty.lower() == "легко":
+            difficulty = "Легко"
+            score = pripyat[0][0]
+            time = pripyat[0][1]
+
+        if mission_difficulty.lower() == "сложно":
+            difficulty = "Сложно"
+            score = pripyat[1][0]
+            time = pripyat[1][1]
+
+        if mission_difficulty.lower() == "профи":
+            difficulty = "Профи"
+            score = pripyat[2][0]
+            time = pripyat[2][1]
+
+    if mission_name.lower() == "затмение":
+        name = "Затмение"
+        send = True
+
+        if mission_difficulty.lower() == "легко":
+            difficulty = "Легко"
+            score = eclipse[0][0]
+            time = eclipse[0][1]
+
+        if mission_difficulty.lower() == "сложно":
+            difficulty = "Сложно"
+            score = eclipse[1][0]
+            time = eclipse[1][1]
+
+        if mission_difficulty.lower() == "профи":
+            difficulty = "Профи"
+            score = eclipse[2][0]
+            time = eclipse[2][1]
+
+    if mission_name.lower() == "ледокол":
+        name = "Ледокол"
+        send = True
+
+        if mission_difficulty.lower() == "легко":
+            difficulty = "Легко"
+            score = icebreaker[0][0]
+            time = icebreaker[0][1]
+
+        if mission_difficulty.lower() == "сложно":
+            difficulty = "Сложно"
+            score = icebreaker[1][0]
+            time = icebreaker[1][1]
+
+        if mission_difficulty.lower() == "профи":
+            difficulty = "Профи"
+            score = icebreaker[2][0]
+            time = icebreaker[2][1]
+
+    if mission_name.lower() == "черная акула":
+        name = "Черная акула"
+        send = True
+
+        if mission_difficulty.lower() == "легко":
+            difficulty = "Легко"
+            score = black_shark[0][0]
+            time = black_shark[0][1]
+
+        if mission_difficulty.lower() == "сложно":
+            difficulty = "Сложно"
+            score = black_shark[1][0]
+            time = black_shark[1][1]
+
+        if mission_difficulty.lower() == "профи":
+            difficulty = "Профи"
+            score = black_shark[2][0]
+            time = black_shark[2][1]
+
+    if mission_name.lower() == "анубис":
+        name = "Анубис"
+        send = True
+
+        if mission_difficulty.lower() == "легко":
+            difficulty = "Легко"
+            score = anubis[0][0]
+            time = anubis[0][1]
+
+        if mission_difficulty.lower() == "сложно":
+            difficulty = "Сложно"
+            score = anubis[1][0]
+            time = anubis[1][1]
+
+        if mission_difficulty.lower() == "профи":
+            difficulty = "Профи"
+            score = anubis[2][0]
+            time = anubis[2][1]
+
+    if mission_name.lower() == "вулкан":
+        name = "Вулкан"
+        send = True
+
+        if mission_difficulty.lower() == "легко":
+            difficulty = "Легко"
+            score = volcano[0][0]
+            time = volcano[0][1]
+
+        if mission_difficulty.lower() == "сложно":
+            difficulty = "Сложно"
+            score = volcano[1][0]
+            time = volcano[1][1]
+
+        if mission_difficulty.lower() == "профи":
+            difficulty = "Профи"
+            score = volcano[2][0]
+            time = volcano[2][1]
+
+        if mission_difficulty.lower() == "хардкор":
+            difficulty = "Хардкор"
+            score = volcano[3][0]
+            time = volcano[3][1]
+
+    if mission_name.lower() == "снежный бастион":
+        name = "Снежный бастион"
+        send = True
+
+        if mission_difficulty.lower() == "острие":
+            difficulty = "Острие"
+            score = snow_bastion[0][0]
+            time = snow_bastion[0][1]
+
+        if mission_difficulty.lower() == "засада":
+            difficulty = "Засада"
+            score = snow_bastion[1][0]
+            time = snow_bastion[1][1]
+
+        if mission_difficulty.lower() == "зенит":
+            difficulty = "Зенит"
+            score = snow_bastion[2][0]
+            time = snow_bastion[2][1]
+
+        if mission_difficulty.lower() == "марафон":
+            difficulty = "Марафон"
+            score = snow_bastion[3][0]
+            time = snow_bastion[3][1]
+
+    if mission_name.lower() == "белая акула":
+        name = "Белая акула"
+        send = True
+        score = white_shark[0]
+        time = white_shark[1]
+
+    if send:
+        if white_shark_flag:
+            await ctx.send(name + ":\n```Очки: " + "{:,}".format(score).replace(',', ' ') + "\nВремя: " + time + "```")
+        else:
+            await ctx.send(name + " -> " + difficulty + ":\n```Очки: " + "{:,}".format(score).replace(',', ' ') + "\nВремя: " + time + "```")
+
+    await ctx.message.delete()
 
 @ban.error
 async def ban_error(ctx, error):
