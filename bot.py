@@ -51,6 +51,24 @@ anubis = [
     [1841000, "35:00"]
 ]
 
+sunrise = [
+    [171000, "49:00"],
+    [180000, "64:00"],
+    [180000, "64:00"]
+]
+
+mars = [
+    [764125, "41:00"],
+    [907125, "43:00"],
+    [1903121, "45:00"]
+]
+
+dangerous_experiment = [
+    [2016000, "84:00"],
+    [2742000, "76:10"],
+    [2667000, "63:30"]
+]
+
 volcano = [
     [1520000, "35:00"],
     [1566000, "33:30"],
@@ -375,6 +393,63 @@ async def crowns(ctx):
             difficulty = "Профи"
             score = anubis[2][0]
             time = anubis[2][1]
+
+    if mission_name.lower() == "восход":
+        name = "Восход"
+        send = True
+
+        if mission_difficulty.lower() == "легко":
+            difficulty = "Легко"
+            score = sunrise[0][0]
+            time = sunrise[0][1]
+
+        if mission_difficulty.lower() == "сложно":
+            difficulty = "Сложно"
+            score = sunrise[1][0]
+            time = sunrise[1][1]
+
+        if mission_difficulty.lower() == "профи":
+            difficulty = "Профи"
+            score = sunrise[2][0]
+            time = sunrise[2][1]
+    
+    if mission_name.lower() == "марс":
+        name = "Марс"
+        send = True
+
+        if mission_difficulty.lower() == "легко":
+            difficulty = "Легко"
+            score = mars[0][0]
+            time = mars[0][1]
+
+        if mission_difficulty.lower() == "сложно":
+            difficulty = "Сложно"
+            score = mars[1][0]
+            time = mars[1][1]
+
+        if mission_difficulty.lower() == "профи":
+            difficulty = "Профи"
+            score = mars[2][0]
+            time = mars[2][1]
+
+    if mission_name.lower() == "опасный эксперимент":
+        name = "Опасный эксперимент"
+        send = True
+
+        if mission_difficulty.lower() == "легко":
+            difficulty = "Легко"
+            score = dangerous_experiment[0][0]
+            time = dangerous_experiment[0][1]
+
+        if mission_difficulty.lower() == "сложно":
+            difficulty = "Сложно"
+            score = dangerous_experiment[1][0]
+            time = dangerous_experiment[1][1]
+
+        if mission_difficulty.lower() == "профи":
+            difficulty = "Профи"
+            score = dangerous_experiment[2][0]
+            time = dangerous_experiment[2][1]
 
     if mission_name.lower() == "вулкан":
         name = "Вулкан"
