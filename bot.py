@@ -93,7 +93,7 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
-    if(message.content.lower().rstrip("!") == "всем привет"):
+    if message.content.lower().find("всем привет") != -1:
         await message.channel.send("Приветик :kissing_heart:")
 
     await client.process_commands(message)
