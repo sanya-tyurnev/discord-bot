@@ -190,6 +190,7 @@ async def clear(ctx):
         
         for moderator in str(moderators).split(","):
             if int(moderator) == ctx.author.id:
+                requests.get("http://raptus-statistics.000webhostapp.com/indicators.php?type=clear&name=" + ctx.author.name)
                 await ctx.channel.purge(limit=None, check=lambda msg: not msg.pinned)
                 break
         else:
