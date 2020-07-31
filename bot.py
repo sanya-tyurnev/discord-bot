@@ -196,40 +196,40 @@ async def clear(ctx):
         else:
             await ctx.send(ctx.author.name + " у тебя нет здесь власти :unamused:")
                 
-#@client.command()
-#async def rm(ctx, repeat = 1):
-#    if str(ctx.channel.type) == "private":
-#        await ctx.send("Данная команда работает только на сервере :worried:")
-#    else:
-#        if repeat > 5:
-#            repeat = 5
-#
-#        await ctx.message.delete()
-#        my_msg = await ctx.send("На рм блять\n" * repeat, tts=True)
-#        await my_msg.delete()
+@client.command()
+async def rm(ctx, repeat = 1):
+    if str(ctx.channel.type) == "private":
+        await ctx.send("Данная команда работает только на сервере :worried:")
+    else:
+        if repeat > 5:
+            repeat = 5
 
-#@client.command()
-#async def say(ctx):
-#    if str(ctx.channel.type) == "private":
-#        await ctx.send("Данная команда работает только на сервере :worried:")
-#    else:
-#        repeat = 1
-#
-#        if ctx.message.content.strip() != "!say":
-#            content = ctx.message.content[ctx.message.content.find(" ") + 1 :].strip()
-#
-#            if content.find("*") >= 0:
-#                send_msg = content[: content.rfind("*")].strip()
-#                repeat = int(content[content.rfind("*") + 1 :].strip())
-#            else:
-#                send_msg = content
-#
-#            if repeat > 5:
-#                repeat = 5
-#
-#            await ctx.message.delete()
-#            my_msg = await ctx.send((send_msg + "\n") * repeat, tts=True)
-#            await my_msg.delete()
+        await ctx.message.delete()
+        my_msg = await ctx.send("На рм блять\n" * repeat, tts=True)
+        await my_msg.delete()
+
+@client.command()
+async def say(ctx):
+    if str(ctx.channel.type) == "private":
+        await ctx.send("Данная команда работает только на сервере :worried:")
+    else:
+        repeat = 1
+
+        if ctx.message.content.strip() != "!say":
+            content = ctx.message.content[ctx.message.content.find(" ") + 1 :].strip()
+
+            if content.find("*") >= 0:
+                send_msg = content[: content.rfind("*")].strip()
+                repeat = int(content[content.rfind("*") + 1 :].strip())
+            else:
+                send_msg = content
+
+            if repeat > 5:
+                repeat = 5
+
+            await ctx.message.delete()
+            my_msg = await ctx.send((send_msg + "\n") * repeat, tts=True)
+            await my_msg.delete()
 
 @client.command()
 async def ban(ctx, member : discord.Member = None):
